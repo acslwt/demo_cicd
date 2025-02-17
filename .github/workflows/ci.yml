@@ -1,0 +1,8 @@
+demo_cicd:
+  image: alpine
+  script:
+    - echo "Voici mon premier test les bb"
+    - mkdir build
+    - cd build
+    - touch adamlebg.txt
+    - echo "Adam est le plus bg de la fac" > adamlebg.txt
