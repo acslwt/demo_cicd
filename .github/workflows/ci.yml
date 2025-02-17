@@ -1,8 +1,24 @@
-demo_cicd:
-  image: alpine
-  script:
-    - echo "Voici mon premier test les bb"
-    - mkdir build
-    - cd build
-    - touch adamlebg.txt
-    - echo "Adam est le plus bg de la fac" > adamlebg.txt
+name: Demo CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  demo_cicd:
+    runs-on: ubuntu-latest  # Utilise un runner GitHub
+    container: alpine  # Exécute le job dans un conteneur Alpine
+    steps:
+      - name: Afficher un message
+        run: echo "Voici mon premier test les bb"
+      
+      - name: Créer un répertoire et un fichier
+        run: |
+          mkdir build
+          cd build
+          touch adamlebg.txt
+          echo "Adam est le plus bg de la fac" > adamlebg.txt
+
+      - name: Vérifier le contenu du fichier
+        run: cat build/adamlebg.txt
