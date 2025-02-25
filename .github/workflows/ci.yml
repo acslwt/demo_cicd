@@ -1,4 +1,4 @@
-name: Maven Cache Example
+name: Simple Maven Cache Example
 
 on:
   push:
@@ -13,21 +13,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up JDK
+      - name: Set up Java
         uses: actions/setup-java@v2
         with:
-          java-version: '11'  # Ajustez la version du JDK selon vos besoins
+          java-version: '11'
 
       - name: Cache Maven dependencies
         uses: actions/cache@v2
         with:
           path: ~/.m2/repository
-          key: maven-${{ runner.os }}-build-${{ hashFiles('**/pom.xml') }}
+          key: maven-${{ runner.os }}-build
           restore-keys: |
-            maven-${{ runner.os }}-build-
+            maven-${{ runner.os }}-build
 
       - name: Build with Maven
         run: mvn clean install
-
-      - name: Display the content of .m2/repository
-        run: ls -la ~/.m2/repository
