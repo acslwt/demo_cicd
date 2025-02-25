@@ -1,4 +1,4 @@
-name: Demo CI/CD
+name: Maven Cache Example
 
 on:
   push:
@@ -6,19 +6,28 @@ on:
       - main
 
 jobs:
-  demo_cicd:
-    runs-on: ubuntu-latest  # Utilise un runner GitHub
-    container: alpine  # Exécute le job dans un conteneur Alpine
-    steps:
-      - name: Afficher un message
-        run: echo "Voici mon premier test les bb"
-      
-      - name: Créer un répertoire et un fichier
-        run: |
-          mkdir build
-          cd build
-          touch adamlebg.txt
-          echo "Adam est le plus bg de la fac" > adamlebg.txt
+  build:
+    runs-on: ubuntu-latest
 
-      - name: Vérifier le contenu du fichier
-        run: cat build/adamlebg.txt
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # Ajustez la version du JDK selon vos besoins
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-build-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-${{ runner.os }}-build-
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Display the content of .m2/repository
+        run: ls -la ~/.m2/repository
